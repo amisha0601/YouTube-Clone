@@ -11,13 +11,18 @@ import {
 import profile_icon from "../assets/clone_assets/amisha.jpg";
 import logo from "../assets/clone_assets/Youtube_Logo.svg";
 
-const Navbar = () => {
+// Corrected prop destructuring
+const Navbar = ({ setSidebar }) => {
   return (
     <nav className="flex items-center justify-between px-4 py-2 h-14 sm:h-16 w-full sticky top-0 bg-white z-50 shadow-sm">
       {/* LEFT SECTION */}
       <div className="flex items-center space-x-4 min-w-[130px]">
-        <Bars3Icon className="h-6 w-6 text-gray-700 cursor-pointer" />
-        <img src={logo} alt="YouTube" className="h-6 sm:h-7 w-auto" />
+        {/* Sidebar toggle button */}
+        <Bars3Icon
+          className="h-6 w-6 text-gray-700 cursor-pointer"
+          onClick={() => setSidebar((prev) => !prev)}
+        />
+        <img src={logo} alt="YouTube" className="h-6 sm:h-6 w-auto" />
       </div>
 
       {/* MIDDLE SECTION - SEARCH BAR */}

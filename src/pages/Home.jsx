@@ -1,12 +1,13 @@
-import React from 'react'
-import Sidebar from '../components/Sidebar'
+import React from 'react';
+import Sidebar from '../components/Sidebar';
 
-const Home = () => {
+const Home = ({ sidebar }) => {
   return (
-    <div>
-      <Sidebar/>
+    <div className='flex'>
+      {/* Pass the 'sidebar' prop from App.js as 'isSidebarOpen' to Sidebar */}
+      <Sidebar isSidebarOpen={sidebar} />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
