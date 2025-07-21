@@ -11,7 +11,7 @@ import {
 import profile_icon from "../assets/clone_assets/amisha.jpg";
 import logo from "../assets/clone_assets/Youtube_Logo.svg";
 
-// Corrected prop destructuring
+
 const Navbar = ({ setSidebar }) => {
   return (
     <nav className="flex items-center justify-between px-4 py-2 h-14 sm:h-16 w-full sticky top-0 bg-white z-50 shadow-sm">
