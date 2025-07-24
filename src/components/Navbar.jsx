@@ -10,7 +10,7 @@ import {
 
 import profile_icon from "../assets/clone_assets/amisha.jpg";
 import logo from "../assets/clone_assets/Youtube_Logo.svg";
-
+import { Link } from "react-router-dom";
 
 const Navbar = ({ setSidebar }) => {
   return (
@@ -18,11 +18,16 @@ const Navbar = ({ setSidebar }) => {
       {/* LEFT SECTION */}
       <div className="flex items-center space-x-4 min-w-[130px]">
         {/* Sidebar toggle button */}
-        <Bars3Icon
-          className="h-6 w-6 text-gray-700 cursor-pointer"
-          onClick={() => setSidebar((prev) => !prev)}
-        />
-        <img src={logo} alt="YouTube" className="h-6 sm:h-6 w-auto" />
+        <Link to="/">
+          <Bars3Icon
+            className="h-6 w-6 text-gray-700 cursor-pointer"
+            onClick={() => setSidebar((prev) => !prev)}
+          />
+        </Link>
+
+        <Link to="/">
+          <img src={logo} alt="YouTube" className="h-6 sm:h-6 w-auto" />
+        </Link>
       </div>
 
       {/* MIDDLE SECTION - SEARCH BAR */}

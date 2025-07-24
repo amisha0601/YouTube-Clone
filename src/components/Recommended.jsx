@@ -1,27 +1,47 @@
-import React from "react";
-import thumbnails from "./Thumbnails"; // 12 thumbnail objects exported from here
+import React, { useEffect, useState } from "react";
+import { API_KEY } from "../data";
+import { value_converter } from "../data";
+import { Link } from "react-router-dom";
 
-const Recommended = () => {
+const Recommended = ({ categoryId }) => {
+  const [apiData, setApiData] = useState([]);
+
+  const fetchData = async () => {
+    const relatedVideo_url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=50&regionCode=IN&videoCategoryId=${categoryId}&key=${API_KEY}`;
+    const res = await fetch(relatedVideo_url);
+    const data = await res.json();
+    setApiData(data.items);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [categoryId]);
+
   return (
-    <div className="space-y-4">
-      {thumbnails.slice(0, 12).map((video, index) => (
-        <div key={index} className="flex gap-3 cursor-pointer">
-          {/* Thumbnail Image */}
+    <div className="flex flex-col gap-4">
+      {apiData.map((item, index) => (
+        <Link
+          to={`/video/${item.snippet.categoryId}/${item.id}`}
+          key={index}
+          className="flex gap-2 w-full hover:bg-gray-100 p-2 rounded-sm transition-all duration-150"
+        >
           <img
-            src={video.thumbnail}
-            alt={`Thumbnail ${index + 1}`}
-            className="w-40 h-24 rounded-lg object-cover"
+            src={item.snippet.thumbnails.medium.url}
+            alt={item.snippet.title}
+            className="w-44 h-25 object-cover rounded-sm flex-shrink-0"
           />
-
-          {/* Video Info */}
-          <div className="flex flex-col">
-            <h4 className="text-sm font-semibold text-black line-clamp-2">
-              {video.title}
+          <div className="flex flex-col justify-between overflow-hidden">
+            <h4 className="text-sm font-semibold text-neutral-700 line-clamp-3">
+              {item.snippet.title}
             </h4>
-            <p className="text-sm text-gray-600">{video.channel}</p>
-            <p className="text-sm text-gray-400">{video.stats}</p>
+            <p className="text-xs -mt-1 text-neutral-600 line-clamp-1">
+              {item.snippet.channelTitle}
+            </p>
+            <p className="text-xs font-semibold text-neutral-600 -mt-1">
+              {value_converter(item.statistics.viewCount)} views
+            </p>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
