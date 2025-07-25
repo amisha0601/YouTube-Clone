@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Video from "./pages/Video";
-import { Route, Routes } from "react-router-dom";
+import SearchResults from "./pages/SearchResults";
 
 function App() {
   const [sidebar, setSidebar] = useState(true);
@@ -11,10 +12,9 @@ function App() {
     <div>
       <Navbar setSidebar={setSidebar} />
       <Routes>
-        <Route path="/" element={<Home sidebar={sidebar} />}>
-
-        </Route>
-        <Route path="/video/:categoryId/:videoId" element={<Video />}></Route>
+        <Route path="/" element={<Home sidebar={sidebar} />} />
+        <Route path="/search" element={<SearchResults />} />
+        <Route path="/video/:categoryId/:videoId" element={<Video />} />
       </Routes>
     </div>
   );

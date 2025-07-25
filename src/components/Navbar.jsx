@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
@@ -7,17 +7,26 @@ import {
   EllipsisVerticalIcon,
   MicrophoneIcon,
 } from "@heroicons/react/24/outline";
+import { useNavigate, Link } from "react-router-dom";
 
 import profile_icon from "../assets/clone_assets/amisha.jpg";
 import logo from "../assets/clone_assets/Youtube_Logo.svg";
-import { Link } from "react-router-dom";
 
 const Navbar = ({ setSidebar }) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
+
   return (
     <nav className="flex items-center justify-between px-4 py-2 h-14 sm:h-16 w-full sticky top-0 bg-white z-50 shadow-sm">
       {/* LEFT SECTION */}
       <div className="flex items-center space-x-4 min-w-[130px]">
-        {/* Sidebar toggle button */}
         <Link to="/">
           <Bars3Icon
             className="h-6 w-6 text-gray-700 cursor-pointer"
@@ -36,9 +45,15 @@ const Navbar = ({ setSidebar }) => {
           <input
             type="text"
             placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
             className="flex-grow px-4 text-sm focus:outline-none"
           />
-          <button className="bg-gray-100 px-4 flex items-center justify-center">
+          <button
+            onClick={handleSearch}
+            className="bg-gray-100 px-4 flex items-center justify-center"
+          >
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-600" />
           </button>
         </div>
