@@ -26,7 +26,7 @@ const Recommended = ({ categoryId }) => {
           <Link
             to={`/video/${item.snippet.categoryId}/${item.id}`}
             key={index}
-            className="flex gap-2 w-full hover:bg-gray-100 p-2 rounded-sm transition-all duration-150"
+            className="flex gap-2 w-full hover:bg-gray-100 p-1 rounded-sm transition-all duration-150"
           >
             <img
               src={item.snippet.thumbnails.medium.url}
@@ -34,13 +34,13 @@ const Recommended = ({ categoryId }) => {
               className="w-44 h-25 object-cover rounded-sm flex-shrink-0"
             />
             <div className="flex flex-col justify-between overflow-hidden">
-              <h4 className="text-sm font-semibold text-neutral-700 line-clamp-3">
+              <h4 className="text-xs/relaxed font-semibold text-neutral-800 line-clamp-3">
                 {item.snippet.title}
               </h4>
-              <p className="text-xs -mt-1 text-neutral-600 line-clamp-1">
+              <p className="text-xs font-medium -mt-1 text-neutral-600 line-clamp-1">
                 {item.snippet.channelTitle}
               </p>
-              <p className="text-xs font-semibold text-neutral-600 -mt-1">
+              <p className="text-xs font-semibold text-neutral-600">
                 {value_converter(item.statistics.viewCount)} views
               </p>
 

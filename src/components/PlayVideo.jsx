@@ -124,7 +124,7 @@ const PlayVideo = () => {
 
   return (
     <div className="px-3 md:px-4 lg:px-8 py-4 bg-white text-gray-800">
-      <div className="relative w-full pb-[56.25%] mb-4 rounded-lg overflow-hidden shadow-lg">
+      <div className="relative w-full p-62 mb-4 rounded-lg overflow-hidden shadow-2xl/70">
         <iframe
           src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -134,11 +134,11 @@ const PlayVideo = () => {
         ></iframe>
       </div>
 
-      <h2 className="text-xl md:text-2xl font-semibold mt-4 mb-2 leading-tight text-gray-900">
+      <h2 className="text-xl md:text-2xl/tight font-semibold mt-4 mb-2 leading-tight text-gray-900">
         {apiData.snippet.title}
       </h2>
 
-      <div className="flex justify-between flex-wrap gap-3 items-center text-sm text-gray-700 mb-4">
+      <div className="flex justify-between flex-wrap gap-3 items-center text-sm font-semibold text-gray-800 mb-4">
         <p>
           {value_converter(apiData.statistics.viewCount)} views ·{" "}
           {moment(apiData.snippet.publishedAt).fromNow()}
@@ -199,11 +199,11 @@ const PlayVideo = () => {
 
       <hr className="my-5 border-gray-300" />
 
-      <h4 className="text-lg font-semibold mb-3 text-gray-900">
+      <h4 className="text-lg font-semibold mb-3  text-gray-900">
         {apiData.statistics.commentCount
-          ? value_converter(apiData.statistics.commentCount)
-          : "0"}
-        Comments
+          ? value_converter(apiData.statistics.commentCount) + " "
+         : "0"}  
+          Comments
       </h4>
 
       {commentData.length > 0 ? (
