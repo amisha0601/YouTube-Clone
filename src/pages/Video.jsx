@@ -8,7 +8,7 @@ const Video = () => {
   const {videoId, categoryId} = useParams();
 
   return (
-    <div className="flex flex-col lg:flex-row p-4 gap-4">
+    <div className="flex flex-col lg:flex-row p-4 gap-4 bg-[#f9f9f9] dark:bg-zinc-900 dark:text-white transition-colors duration-300">
       <div className="flex-[3]">
         <PlayVideo videoId={videoId}/>
       </div>

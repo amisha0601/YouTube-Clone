@@ -38,18 +38,19 @@ const Sidebar = ({ isSidebarOpen, category, setCategory }) => {
     <div
       className={`${
         isSidebarOpen ? "w-54" : "w-[72px]"
-      } bg-white border-r border-gray-200 text-gray-900 h-screen fixed transition-all duration-300 pt-2`}
+      } bg-white dark:bg-zinc-900 border-r border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-white h-screen fixed transition-all duration-300 pt-2`}
     >
       {/* Main Links */}
       <div className="space-y-2">
-        {mainLinks.map(({ icon: Icon, label, id }) => (
+        {mainLinks.map(({ icon:Icon, label, id }) => (
           <div
             key={label}
             onClick={() => setCategory(id)}
-            className={`flex items-center px-4 py-1 rounded-lg cursor-pointer hover:bg-gray-100
-              ${category === id ? "bg-gray-200 font-semibold" : ""}`}
+            className={`flex items-center px-4 py-1 rounded-lg cursor-pointer transition-colors duration-150
+                        hover:bg-gray-100 dark:hover:bg-zinc-800
+                        ${category === id ? "bg-gray-200 dark:bg-zinc-800 font-semibold" : ""}`}
           >
-            <Icon className="h-5 w-5 text-gray-900 flex-shrink-0" />
+            <Icon className="h-5 w-5 text-gray-900 dark:text-white flex-shrink-0" />
             {isSidebarOpen && (
               <span className="text-[14.5px] ml-4 whitespace-nowrap transition-opacity duration-300">
                 {label}
@@ -62,20 +63,20 @@ const Sidebar = ({ isSidebarOpen, category, setCategory }) => {
             )}
           </div>
         ))}
-        {isSidebarOpen && <hr className="my-3 border-gray-300" />}
+        {isSidebarOpen && <hr className="my-3 border-gray-300 dark:border-zinc-700" />}
       </div>
 
-      {/* Subscribed Section */}
       <div className="space-y-[2px]">
         {isSidebarOpen && (
-          <h3 className="text-[15px] font-semibold text-gray-900 mb-2 px-4">
+          <h3 className="text-[15px] font-semibold text-gray-900 dark:text-white mb-2 px-4">
             Subscriptions
           </h3>
         )}
         {subscribed.map((sub, index) => (
           <div
             key={index}
-            className="flex items-center px-4 py-2 hover:bg-gray-100 rounded-lg cursor-pointer"
+            className="flex items-center px-4 py-2 rounded-lg cursor-pointer transition-colors duration-150
+                        hover:bg-gray-100 dark:hover:bg-zinc-800"
           >
             <img
               src={sub.img}

@@ -1,4 +1,55 @@
-@import "tailwindcss" ;
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 @tailwind utilities;
 
 
+body {
+ 
+  --bg-primary: #f9f9f9; 
+  --bg-secondary: #ffffff; 
+  --bg-tertiary: #f0f0f0;
+  --text-primary: #0f0f0f; 
+  --text-secondary: #606060; 
+  --text-tertiary: #1a1a1a; 
+  --border-color: #e0e0e0; 
+  --input-bg: #f5f5f5; 
+  --input-border: #cccccc;
+  --icon-color: #606060; 
+  --yt-red: #ff0000; 
+
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease; 
+}
+
+body.dark {
+ 
+  --bg-primary: #181818; 
+  --bg-secondary: #202020; 
+  --bg-tertiary: #303030; 
+  --text-primary: #f1f1f1; 
+  --text-secondary: #aaaaaa;
+  --text-tertiary: #ffffff; 
+  --border-color: #303030; 
+  --input-bg: #121212; 
+  --input-border: #383838; 
+  --icon-color: #aaaaaa;
+  --yt-red: #ff0000;
+
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+a {
+  color: inherit; 
+}
+
+input::placeholder {
+  color: var(--text-secondary);
+}
+
+textarea::placeholder {
+  color: var(--text-secondary);
+}

@@ -49,7 +49,7 @@ function SearchResults() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen text-lg font-semibold text-gray-700">
+      <div className="flex justify-center items-center h-screen text-lg font-semibold text-gray-700 dark:text-gray-300">
         Loading search results...
       </div>
     );
@@ -57,7 +57,7 @@ function SearchResults() {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen text-red-600 text-lg font-semibold text-center p-4">
+      <div className="flex justify-center items-center h-screen text-red-600 dark:text-red-400 text-lg font-semibold text-center p-4">
         Error: {error}
       </div>
     );
@@ -65,22 +65,22 @@ function SearchResults() {
 
   if (!searchResults.length && query) {
     return (
-      <div className="p-4 text-center text-gray-600 text-lg">
+      <div className="p-4 text-center text-gray-600 dark:text-gray-400 text-lg">
         No videos found for "{query}". Try a different search term.
       </div>
     );
   }
 
   return (
-    <div className="p-6"> 
-      <h1 className="text-lg md:text-xl font-bold mb-6 text-gray-800 text-center sm:text-left pl-14">
+    <div className="p-6 bg-white dark:bg-zinc-900 dark:text-white transition-colors duration-300">
+      <h1 className="text-lg md:text-xl font-bold mb-6 text-gray-800 dark:text-white text-center sm:text-left pl-14">
         Search Results for "{query}"
       </h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-7 px-14 py-4">
         {searchResults.map((item) => (
           <Link
-            key={item.id.videoId} 
+            key={item.id.videoId}
             to={`/video/${item.snippet.categoryId || "0"}/${item.id.videoId}`}
             className="rounded-md transition-all duration-150"
           >
@@ -90,13 +90,13 @@ function SearchResults() {
               className="w-full h-[140px] object-cover rounded-md transition-transform duration-200 ease-in-out hover:scale-[1.01]"
             />
             <div className="mt-2 px-1 flex flex-col gap-[2px]">
-              <h2 className="text-sm font-medium text-neutral-800 line-clamp-2">
+              <h2 className="text-sm font-medium text-neutral-800 dark:text-neutral-200 line-clamp-2">
                 {item.snippet.title}
               </h2>
-              <h3 className="text-xs font-medium text-neutral-700 line-clamp-1">
+              <h3 className="text-xs font-medium text-neutral-700 dark:text-neutral-300 line-clamp-1">
                 {item.snippet.channelTitle}
               </h3>
-              <p className="text-xs font-semibold text-neutral-600">
+              <p className="text-xs font-semibold text-neutral-600 dark:text-neutral-400">
                 {moment(item.snippet.publishedAt).fromNow()}
               </p>
             </div>

@@ -100,7 +100,7 @@ const PlayVideo = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen text-lg font-semibold text-gray-700">
+      <div className="flex justify-center items-center h-screen text-lg font-semibold text-gray-700 dark:text-gray-300">
         Loading video details...
       </div>
     );
@@ -108,7 +108,7 @@ const PlayVideo = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center items-center h-screen text-red-600 text-lg font-semibold text-center p-4">
+      <div className="flex justify-center items-center h-screen text-red-600 dark:text-red-400 text-lg font-semibold text-center p-4">
         Error: {error}
       </div>
     );
@@ -116,51 +116,52 @@ const PlayVideo = () => {
 
   if (!apiData) {
     return (
-      <div className="flex justify-center items-center h-screen text-gray-600 text-lg font-semibold">
+      <div className="flex justify-center items-center h-screen text-gray-600 dark:text-gray-400 text-lg font-semibold">
         Video content could not be loaded. It might be private or deleted.
       </div>
     );
   }
 
   return (
-    <div className="px-3 md:px-4 lg:px-8 py-4 bg-white text-gray-800">
-      <div className="relative w-full p-62 mb-4 rounded-lg overflow-hidden shadow-2xl/70">
-        <iframe
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-          className="absolute top-0 left-0 w-full h-full"
-          title={apiData.snippet.title || "YouTube Video"}
-        ></iframe>
-      </div>
+         <div className="bg-white text-gray-800 dark:bg-zinc-900 dark:text-white transition-colors duration-300">
+          <div className="relative w-full aspect-video mb-4 rounded-lg overflow-hidden shadow-2xl/70">
+            {/* Corrected YouTube embed URL and variable interpolation */}
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="absolute top-0 left-0 w-full h-full"
+              title={apiData.snippet.title || "YouTube Video"}
+            ></iframe>
+          </div>
 
-      <h2 className="text-xl md:text-2xl/tight font-semibold mt-4 mb-2 leading-tight text-gray-900">
+      <h2 className="text-xl md:text-2xl/tight font-semibold mt-4 mb-2 leading-tight text-gray-900 dark:text-white">
         {apiData.snippet.title}
       </h2>
 
-      <div className="flex justify-between flex-wrap gap-3 items-center text-sm font-semibold text-gray-800 mb-4">
+      <div className="flex justify-between flex-wrap gap-3 items-center text-sm font-semibold text-gray-800 dark:text-gray-200 mb-4">
         <p>
           {value_converter(apiData.statistics.viewCount)} views ·{" "}
           {moment(apiData.snippet.publishedAt).fromNow()}
         </p>
         <div className="flex flex-wrap gap-4 text-sm">
-          <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors">
+          <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             <HandThumbUpIcon className="w-5 h-5" />
             {value_converter(apiData.statistics.likeCount)}
           </span>
-          <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors">
+          <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             <HandThumbDownIcon className="w-5 h-5" />
           </span>
-          <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors">
+          <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             <ShareIcon className="w-5 h-5" /> Share
           </span>
-          <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors">
+          <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             <BookmarkIcon className="w-5 h-5" /> Save
           </span>
         </div>
       </div>
 
-      <hr className="my-4 border-gray-300" />
+      <hr className="my-4 border-gray-300 dark:border-zinc-700" />
 
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
@@ -172,10 +173,10 @@ const PlayVideo = () => {
             />
           )}
           <div>
-            <p className="font-semibold text-gray-900">
+            <p className="font-semibold text-gray-900 dark:text-white">
               {apiData.snippet.channelTitle}
             </p>
-            <p className="text-xs font-medium text-gray-800">
+            <p className="text-xs font-medium text-gray-800 dark:text-gray-300">
               {channelData
                 ? value_converter(channelData.statistics.subscriberCount)
                 : "N/A"}{" "}
@@ -188,7 +189,7 @@ const PlayVideo = () => {
         </button>
       </div>
 
-      <div className="mt-4 p-3 bg-gray-50 rounded-lg text-sm text-gray-800 whitespace-pre-line shadow-inner">
+      <div className="mt-4 p-3 bg-gray-50 dark:bg-zinc-800 rounded-lg text-sm text-gray-800 dark:text-gray-200 whitespace-pre-line shadow-inner">
         <p>
           {apiData.snippet.description
             ? apiData.snippet.description.slice(0, 450) +
@@ -197,12 +198,12 @@ const PlayVideo = () => {
         </p>
       </div>
 
-      <hr className="my-5 border-gray-300" />
+      <hr className="my-5 border-gray-300 dark:border-zinc-700" />
 
-      <h4 className="text-lg font-semibold mb-3  text-gray-900">
+      <h4 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
         {apiData.statistics.commentCount
           ? value_converter(apiData.statistics.commentCount) + " "
-         : "0"}  
+         : "0"}
           Comments
       </h4>
 
@@ -212,7 +213,7 @@ const PlayVideo = () => {
           return (
             <div
               key={item.id || comment.authorChannelId?.value || comment.authorDisplayName + comment.publishedAt}
-              className="flex gap-3 mb-4 p-2 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex gap-3 mb-4 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
             >
               <img
                 src={comment.authorProfileImageUrl}
@@ -221,19 +222,19 @@ const PlayVideo = () => {
                 onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/32x32/cccccc/000000?text=User"; }}
               />
               <div>
-                <h3 className="font-medium text-xs text-gray-800">
+                <h3 className="font-medium text-xs text-gray-800 dark:text-gray-200">
                   {comment.authorDisplayName}
-                  <span className="text-gray-500 text-xs ml-2">
+                  <span className="text-gray-500 dark:text-gray-400 text-xs ml-2">
                     {moment(comment.publishedAt).fromNow()}
                   </span>
                 </h3>
-                <p className="text-gray-800 text-sm mt-1">{comment.textDisplay}</p>
-                <div className="flex gap-3 mt-2 text-xs text-gray-600">
-                  <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors">
+                <p className="text-gray-800 dark:text-gray-200 text-sm mt-1">{comment.textDisplay}</p>
+                <div className="flex gap-3 mt-2 text-xs text-gray-600 dark:text-gray-400">
+                  <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                     <HandThumbUpIcon className="w-4 h-4" />
                     {value_converter(comment.likeCount)}
                   </span>
-                  <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 transition-colors">
+                  <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                     <HandThumbDownIcon className="w-4 h-4" />
                   </span>
                 </div>
@@ -242,7 +243,7 @@ const PlayVideo = () => {
           );
         })
       ) : (
-        <p className="text-gray-500 text-sm italic">No comments to display.</p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm italic">No comments to display.</p>
       )}
     </div>
   );
