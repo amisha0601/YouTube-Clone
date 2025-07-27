@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNavigate, Link } from "react-router-dom";
 
-import profile_icon from "../assets/clone_assets/amisha.jpg";
+import profile_icon from "../assets/clone_assets/amishapfp.jpg"; 
 import logo from "../assets/clone_assets/Youtube_Logo.svg";
 import logo2 from "../assets/clone_assets/Youtube_Dark_Logo.svg";
 
@@ -31,17 +31,32 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
   ];
   const notificationsRef = useRef(null);
 
+  const [showZoomedPfp, setShowZoomedPfp] = useState(false);
+  const pfpZoomRef = useRef(null);
+
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutsideNotifications = (event) => {
       if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
         setShowNotifications(false);
       }
     };
 
+    const handleClickOutsidePfpZoom = (event) => {
+      if (pfpZoomRef.current && !pfpZoomRef.current.contains(event.target)) {
+        setShowZoomedPfp(false);
+      }
+    };
+
     if (showNotifications) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutsideNotifications);
     } else {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutsideNotifications);
+    }
+
+    if (showZoomedPfp) {
+      document.addEventListener("mousedown", handleClickOutsidePfpZoom);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutsidePfpZoom);
     }
 
     return () => {
@@ -49,9 +64,10 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         currentStream.current.getTracks().forEach((track) => track.stop());
         currentStream.current = null;
       }
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutsideNotifications);
+      document.removeEventListener("mousedown", handleClickOutsidePfpZoom);
     };
-  }, [showNotifications]);
+  }, [showNotifications, showZoomedPfp]);
 
   const handleSearch = (queryToSearch = searchQuery) => {
     if (queryToSearch.trim()) {
@@ -139,6 +155,14 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
     setShowNotifications((prev) => !prev);
   };
 
+  const handlePfpClick = () => {
+    setShowZoomedPfp(true);
+  };
+
+  const closePfpZoom = () => {
+    setShowZoomedPfp(false);
+  };
+
   return (
     <nav
       className="flex items-center justify-between px-4 py-2 h-14 sm:h-16 w-full sticky top-0 shadow-sm
@@ -206,7 +230,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
                       }`}
           onClick={handleVideoCameraClick}
         />
-
+        
         <div className="relative">
           <BellIcon
             className="h-6 w-6 text-gray-700 dark:text-gray-300 cursor-pointer"
@@ -231,7 +255,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
             {dummyNotifications.length > 0 && (
               <ul className="divide-y divide-gray-200 dark:divide-zinc-700">
                 {dummyNotifications.map((notif) => (
-                  <li key={notif.id} className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-zinc-700  cursor-pointer shadow-lg">
+                  <li key={notif.id} className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-zinc-700 cursor-pointer shadow-lg">
                     <p className="text-sm text-gray-800 dark:text-gray-200 line-clamp-2 ">{notif.message}</p>
                   </li>
                 ))}
@@ -259,8 +283,9 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
 
         <img
           src={profile_icon}
-          alt="User"
-          className="h-8 w-8 rounded-full object-cover"
+          alt="User Profile"
+          className="h-8 w-8 rounded-full object-cover cursor-pointer"
+          onClick={handlePfpClick}
         />
       </div>
 
@@ -282,6 +307,27 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
             >
               Close Camera
             </button>
+          </div>
+        </div>
+      )}
+
+      {showZoomedPfp && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-[100] cursor-pointer"
+          onClick={closePfpZoom}
+        >
+          <div
+            ref={pfpZoomRef}
+            className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] xl:w-[500px] xl:h-[500px]
+                       rounded-full overflow-hidden shadow-2xl border-2 border-white dark:border-gray-700
+                       transform scale-100 transition-transform duration-300 ease-out"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={profile_icon}
+              alt="Zoomed User Profile"
+              className="w-full h-full object-cover"
+            />
           </div>
         </div>
       )}
