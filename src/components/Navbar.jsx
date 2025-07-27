@@ -23,14 +23,35 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
   const currentStream = useRef(null);
   const navigate = useNavigate();
 
+  const [showNotifications, setShowNotifications] = useState(false);
+  const dummyNotifications = [
+    { id: 1, message: "New video from WeAllCode!! 'React Basics'" },
+    { id: 2, message: "Your comment on 'JS Tutorial' received 8 likes." },
+    { id: 3, message: "Live: Coding Stream by CodeWithAmisha is starting soon!" },
+  ];
+  const notificationsRef = useRef(null);
+
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+        setShowNotifications(false);
+      }
+    };
+
+    if (showNotifications) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
     return () => {
       if (currentStream.current) {
         currentStream.current.getTracks().forEach((track) => track.stop());
         currentStream.current = null;
       }
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [showNotifications]);
 
   const handleSearch = (queryToSearch = searchQuery) => {
     if (queryToSearch.trim()) {
@@ -114,6 +135,10 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
     }
   };
 
+  const toggleNotifications = () => {
+    setShowNotifications((prev) => !prev);
+  };
+
   return (
     <nav
       className="flex items-center justify-between px-4 py-2 h-14 sm:h-16 w-full sticky top-0 shadow-sm
@@ -131,11 +156,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           {currentTheme === "light" ? (
             <img src={logo} alt="YouTube" className="h-6 sm:h-6 w-auto" />
           ) : (
-            <img
-              src={logo2}
-              alt="YouTube Dark Mode"
-              className="h-26 sm:h-26 w-auto"
-            />
+            <img src={logo2} alt="YouTube Dark Mode" className="h-26 sm:h-26 w-auto" />
           )}
         </Link>
       </div>
@@ -175,9 +196,9 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         )}
       </div>
 
-      <div className="flex items-center space-x-4 min-w-[130px] justify-end">
+      <div className="flex items-center space-x-4 min-w-[130px] justify-end relative">
         <VideoCameraIcon
-          className={`h-6 w-6 cursor-pointer hidden sm:inline transition-colors duration-200 mr-6
+          className={`h-6 w-6 cursor-pointer hidden sm:inline transition-colors duration-200
                       ${
                         showCameraFeed
                           ? "text-red-500"
@@ -185,7 +206,39 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
                       }`}
           onClick={handleVideoCameraClick}
         />
-        <BellIcon className="h-6 w-6 text-gray-700 dark:text-gray-300 cursor-pointer" />
+
+        <div className="relative">
+          <BellIcon
+            className="h-6 w-6 text-gray-700 dark:text-gray-300 cursor-pointer"
+            onClick={toggleNotifications}
+          />
+          {dummyNotifications.length > 0 && (
+            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs/tight font-semibold rounded-full h-3.5 w-3.5 flex items-center justify-center">
+              {dummyNotifications.length}
+            </span>
+          )}
+        </div>
+
+        {showNotifications && (
+          <div
+            ref={notificationsRef}
+            className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-zinc-800 rounded-lg shadow-2xl/80 z-50
+                       border border-gray-300 dark:border-zinc-700 overflow-hidden"
+          >
+            <div className="px-4 py-3 border-b border-gray-200 dark:border-zinc-700 flex justify-between items-center shadow-lg">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Notifications</h3>
+            </div>
+            {dummyNotifications.length > 0 && (
+              <ul className="divide-y divide-gray-200 dark:divide-zinc-700">
+                {dummyNotifications.map((notif) => (
+                  <li key={notif.id} className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-zinc-700  cursor-pointer shadow-lg">
+                    <p className="text-sm text-gray-800 dark:text-gray-200 line-clamp-2 ">{notif.message}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
 
         <button
           onClick={onThemeToggle}
