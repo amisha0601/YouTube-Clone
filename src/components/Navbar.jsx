@@ -10,7 +10,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useNavigate, Link } from "react-router-dom";
 
-import profile_icon from "../assets/clone_assets/amishapfp.jpg";
+import profile_icon from "../assets/clone_assets/amishapfp.jpg"; 
 import logo from "../assets/clone_assets/Youtube_Logo.svg";
 import logo2 from "../assets/clone_assets/Youtube_Dark_Logo.svg";
 
@@ -168,7 +168,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
       className="flex items-center justify-between px-4 py-2 h-14 sm:h-16 w-full sticky top-0 shadow-sm
                  bg-white text-gray-800 dark:bg-zinc-900 dark:text-white dark:shadow-lg dark:shadow-zinc-950/20 z-50 transition-colors duration-300"
     >
-      {/* Left Section: Bars3Icon, YouTube Logo (Always visible) */}
       <div className="flex items-center space-x-4 min-w-[130px]">
         <Link to="/">
           <Bars3Icon
@@ -186,8 +185,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         </Link>
       </div>
 
-      {/* Middle Section: Search Bar & Voice Icon for Desktop/Tablet */}
-      {/* Hidden on mobile, flex on sm (tablet) and up */}
       <div className="flex-grow mx-4 max-w-[600px] hidden sm:flex items-center justify-center relative">
         <div className="flex w-full max-w-[500px] h-10 border border-gray-300 dark:border-zinc-700 rounded-full overflow-hidden">
           <input
@@ -205,7 +202,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
           </button>
         </div>
-        {/* Voice Search (Microphone Icon) for Desktop: Hidden on mobile, block on sm and up */}
         <button
           onClick={handleVoiceSearch}
           className={`ml-3 p-2 rounded-full cursor-pointer transition-colors duration-200
@@ -224,22 +220,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         )}
       </div>
 
-      {/* Right Section: Mobile Voice Icon, Video Camera, Bell, Theme Toggle, Profile Pic */}
       <div className="flex items-center space-x-4 min-w-[130px] justify-end relative">
-        {/* Voice Search (Microphone Icon) for Mobile: Block on mobile, hidden on sm and up */}
-        <button
-          onClick={handleVoiceSearch}
-          className={`p-2 rounded-full cursor-pointer transition-colors duration-200 block sm:hidden
-                      ${
-                        isVoiceListening
-                          ? "bg-red-200 text-red-700 dark:bg-red-800 dark:text-red-200"
-                          : "bg-gray-100 text-gray-600 dark:bg-zinc-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-600"
-                      }`}
-        >
-          <MicrophoneIcon className="h-5 w-5" />
-        </button>
-
-        {/* Video Camera Icon: Hidden on mobile, inline on sm (tablet) and up */}
         <VideoCameraIcon
           className={`h-6 w-6 cursor-pointer hidden sm:inline transition-colors duration-200
                       ${
@@ -250,8 +231,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           onClick={handleVideoCameraClick}
         />
         
-        {/* Bell Icon: Hidden on mobile, block on sm (tablet) and up */}
-        <div className="relative hidden sm:block">
+        <div className="relative">
           <BellIcon
             className="h-6 w-6 text-gray-700 dark:text-gray-300 cursor-pointer"
             onClick={toggleNotifications}
@@ -284,7 +264,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           </div>
         )}
 
-        {/* Theme Toggle Button: Always visible */}
         <button
           onClick={onThemeToggle}
           className="p-2 rounded-full cursor-pointer text-gray-700 dark:text-gray-300
@@ -302,7 +281,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           )}
         </button>
 
-        {/* Profile Picture: Always visible */}
         <img
           src={profile_icon}
           alt="User Profile"

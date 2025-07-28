@@ -73,11 +73,11 @@ function SearchResults() {
 
   return (
     <div className="p-6 bg-white dark:bg-zinc-900 dark:text-white transition-colors duration-300">
-      <h1 className="text-lg md:text-xl font-bold mb-6 text-gray-800 dark:text-white text-center sm:text-left pl-4 sm:pl-6 md:pl-14">
+      <h1 className="text-lg md:text-xl font-bold mb-6 text-gray-800 dark:text-white text-center sm:text-left pl-14">
         Search Results for "{query}"
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-7 px-4 sm:px-6 md:px-14 py-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-7 px-14 py-4">
         {searchResults.map((item) => (
           <Link
             key={item.id.videoId}
