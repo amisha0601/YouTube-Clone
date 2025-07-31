@@ -27,7 +27,10 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
   const dummyNotifications = [
     { id: 1, message: "New video from WeAllCode!! 'React Basics'" },
     { id: 2, message: "Your comment on 'JS Tutorial' received 8 likes." },
-    { id: 3, message: "Live: Coding Stream by CodeWithAmisha is starting soon!" },
+    {
+      id: 3,
+      message: "Live: Coding Stream by CodeWithAmisha is starting soon!",
+    },
   ];
   const notificationsRef = useRef(null);
 
@@ -36,7 +39,10 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
 
   useEffect(() => {
     const handleClickOutsideNotifications = (event) => {
-      if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
+      if (
+        notificationsRef.current &&
+        !notificationsRef.current.contains(event.target)
+      ) {
         setShowNotifications(false);
       }
     };
@@ -50,7 +56,10 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
     if (showNotifications) {
       document.addEventListener("mousedown", handleClickOutsideNotifications);
     } else {
-      document.removeEventListener("mousedown", handleClickOutsideNotifications);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutsideNotifications
+      );
     }
 
     if (showZoomedPfp) {
@@ -64,7 +73,10 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         currentStream.current.getTracks().forEach((track) => track.stop());
         currentStream.current = null;
       }
-      document.removeEventListener("mousedown", handleClickOutsideNotifications);
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutsideNotifications
+      );
       document.removeEventListener("mousedown", handleClickOutsidePfpZoom);
     };
   }, [showNotifications, showZoomedPfp]);
@@ -168,11 +180,11 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
       className="flex items-center justify-between px-4 py-2 h-14 sm:h-16 w-full sticky top-0 shadow-sm
                  bg-white text-gray-800 dark:bg-zinc-900 dark:text-white dark:shadow-lg dark:shadow-zinc-950/20 z-50 transition-colors duration-300"
     >
-      {/* Left Section: Bars3Icon, YouTube Logo (Always visible) */}
       <div className="flex items-center space-x-4 min-w-[130px]">
         <Link to="/">
           <Bars3Icon
-            className="h-6 w-6 text-gray-700 dark:text-gray-300 cursor-pointer"
+            data-testid="menu-icon"
+            className="h-6 w-6 cursor-pointer"
             onClick={() => setSidebar((prev) => !prev)}
           />
         </Link>
@@ -181,13 +193,15 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           {currentTheme === "light" ? (
             <img src={logo} alt="YouTube" className="h-6 sm:h-6 w-auto" />
           ) : (
-            <img src={logo2} alt="YouTube Dark Mode" className="h-26 sm:h-26 w-auto" />
+            <img
+              src={logo2}
+              alt="YouTube Dark Mode"
+              className="h-26 sm:h-26 w-auto"
+            />
           )}
         </Link>
       </div>
 
-      {/* Middle Section: Search Bar & Voice Icon for Desktop/Tablet */}
-      {/* Hidden on mobile, flex on sm (tablet) and up */}
       <div className="flex-grow mx-4 max-w-[600px] hidden sm:flex items-center justify-center relative">
         <div className="flex w-full max-w-[500px] h-10 border border-gray-300 dark:border-zinc-700 rounded-full overflow-hidden">
           <input
@@ -205,7 +219,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
             <MagnifyingGlassIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
           </button>
         </div>
-        {/* Voice Search (Microphone Icon) for Desktop: Hidden on mobile, block on sm and up */}
+
         <button
           onClick={handleVoiceSearch}
           className={`ml-3 p-2 rounded-full cursor-pointer transition-colors duration-200
@@ -224,9 +238,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         )}
       </div>
 
-      {/* Right Section: Mobile Voice Icon, Video Camera, Bell, Theme Toggle, Profile Pic */}
       <div className="flex items-center space-x-4 min-w-[130px] justify-end relative">
-        {/* Voice Search (Microphone Icon) for Mobile: Block on mobile, hidden on sm and up */}
         <button
           onClick={handleVoiceSearch}
           className={`p-2 rounded-full cursor-pointer transition-colors duration-200 block sm:hidden
@@ -239,7 +251,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           <MicrophoneIcon className="h-5 w-5" />
         </button>
 
-        {/* Video Camera Icon: Hidden on mobile, inline on sm (tablet) and up */}
         <VideoCameraIcon
           className={`h-6 w-6 cursor-pointer hidden sm:inline transition-colors duration-200
                       ${
@@ -249,8 +260,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
                       }`}
           onClick={handleVideoCameraClick}
         />
-        
-        {/* Bell Icon: Hidden on mobile, block on sm (tablet) and up */}
+
         <div className="relative hidden sm:block">
           <BellIcon
             className="h-6 w-6 text-gray-700 dark:text-gray-300 cursor-pointer"
@@ -270,13 +280,20 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
                        border border-gray-300 dark:border-zinc-700 overflow-hidden"
           >
             <div className="px-4 py-3 border-b border-gray-200 dark:border-zinc-700 flex justify-between items-center shadow-lg">
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Notifications</h3>
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
+                Notifications
+              </h3>
             </div>
             {dummyNotifications.length > 0 && (
               <ul className="divide-y divide-gray-200 dark:divide-zinc-700">
                 {dummyNotifications.map((notif) => (
-                  <li key={notif.id} className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-zinc-700 cursor-pointer shadow-lg">
-                    <p className="text-sm text-gray-800 dark:text-gray-200 line-clamp-2 ">{notif.message}</p>
+                  <li
+                    key={notif.id}
+                    className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-zinc-700 cursor-pointer shadow-lg"
+                  >
+                    <p className="text-sm text-gray-800 dark:text-gray-200 line-clamp-2 ">
+                      {notif.message}
+                    </p>
                   </li>
                 ))}
               </ul>
@@ -284,7 +301,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           </div>
         )}
 
-        {/* Theme Toggle Button: Always visible */}
         <button
           onClick={onThemeToggle}
           className="p-2 rounded-full cursor-pointer text-gray-700 dark:text-gray-300
@@ -302,7 +318,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           )}
         </button>
 
-        {/* Profile Picture: Always visible */}
         <img
           src={profile_icon}
           alt="User Profile"

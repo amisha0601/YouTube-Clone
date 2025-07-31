@@ -123,17 +123,16 @@ const PlayVideo = () => {
   }
 
   return (
-         <div className="bg-white text-gray-800 dark:bg-zinc-900 dark:text-white transition-colors duration-300">
-          <div className="relative w-full aspect-video mb-4 rounded-lg overflow-hidden shadow-2xl/70">
-            {/* Corrected YouTube embed URL and variable interpolation */}
-            <iframe
-              src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="absolute top-0 left-0 w-full h-full"
-              title={apiData.snippet.title || "YouTube Video"}
-            ></iframe>
-          </div>
+    <div className="bg-white text-gray-800 dark:bg-zinc-900 dark:text-white transition-colors duration-300">
+      <div className="relative w-full aspect-video mb-4 rounded-lg overflow-hidden shadow-2xl/70">
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          className="absolute top-0 left-0 w-full h-full"
+          title={apiData.snippet.title || "YouTube Video"}
+        ></iframe>
+      </div>
 
       <h2 className="text-xl md:text-2xl/tight font-semibold mt-4 mb-2 leading-tight text-gray-900 dark:text-white">
         {apiData.snippet.title}
@@ -203,8 +202,8 @@ const PlayVideo = () => {
       <h4 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">
         {apiData.statistics.commentCount
           ? value_converter(apiData.statistics.commentCount) + " "
-         : "0"}
-          Comments
+          : "0"}
+        Comments
       </h4>
 
       {commentData.length > 0 ? (
@@ -212,14 +211,22 @@ const PlayVideo = () => {
           const comment = item.snippet.topLevelComment.snippet;
           return (
             <div
-              key={item.id || comment.authorChannelId?.value || comment.authorDisplayName + comment.publishedAt}
+              key={
+                item.id ||
+                comment.authorChannelId?.value ||
+                comment.authorDisplayName + comment.publishedAt
+              }
               className="flex gap-3 mb-4 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-zinc-800 transition-colors"
             >
               <img
                 src={comment.authorProfileImageUrl}
                 className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                 alt={comment.authorDisplayName}
-                onError={(e) => { e.target.onerror = null; e.target.src="https://placehold.co/32x32/cccccc/000000?text=User"; }}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src =
+                    "https://placehold.co/32x32/cccccc/000000?text=User";
+                }}
               />
               <div>
                 <h3 className="font-medium text-xs text-gray-800 dark:text-gray-200">
@@ -228,7 +235,9 @@ const PlayVideo = () => {
                     {moment(comment.publishedAt).fromNow()}
                   </span>
                 </h3>
-                <p className="text-gray-800 dark:text-gray-200 text-sm mt-1">{comment.textDisplay}</p>
+                <p className="text-gray-800 dark:text-gray-200 text-sm mt-1">
+                  {comment.textDisplay}
+                </p>
                 <div className="flex gap-3 mt-2 text-xs text-gray-600 dark:text-gray-400">
                   <span className="flex items-center gap-1 cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                     <HandThumbUpIcon className="w-4 h-4" />
@@ -243,7 +252,9 @@ const PlayVideo = () => {
           );
         })
       ) : (
-        <p className="text-gray-500 dark:text-gray-400 text-sm italic">No comments to display.</p>
+        <p className="text-gray-500 dark:text-gray-400 text-sm italic">
+          No comments to display.
+        </p>
       )}
     </div>
   );

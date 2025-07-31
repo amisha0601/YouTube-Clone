@@ -40,15 +40,18 @@ const Sidebar = ({ isSidebarOpen, category, setCategory }) => {
         isSidebarOpen ? "w-54" : "w-[72px]"
       } bg-white dark:bg-zinc-900 border-r border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-white h-screen fixed transition-all duration-300 pt-2`}
     >
-      {/* Main Links */}
       <div className="space-y-2">
-        {mainLinks.map(({ icon:Icon, label, id }) => (
+        {mainLinks.map(({ icon: Icon, label, id }) => (
           <div
             key={label}
             onClick={() => setCategory(id)}
             className={`flex items-center px-4 py-1 rounded-lg cursor-pointer transition-colors duration-150
                         hover:bg-gray-100 dark:hover:bg-zinc-800
-                        ${category === id ? "bg-gray-200 dark:bg-zinc-800 font-semibold" : ""}`}
+                        ${
+                          category === id
+                            ? "bg-gray-200 dark:bg-zinc-800 font-semibold"
+                            : ""
+                        }`}
           >
             <Icon className="h-5 w-5 text-gray-900 dark:text-white flex-shrink-0" />
             {isSidebarOpen && (
@@ -63,7 +66,9 @@ const Sidebar = ({ isSidebarOpen, category, setCategory }) => {
             )}
           </div>
         ))}
-        {isSidebarOpen && <hr className="my-3 border-gray-300 dark:border-zinc-700" />}
+        {isSidebarOpen && (
+          <hr className="my-3 border-gray-300 dark:border-zinc-700" />
+        )}
       </div>
 
       <div className="space-y-[2px]">
