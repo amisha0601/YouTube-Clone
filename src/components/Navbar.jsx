@@ -11,7 +11,7 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 
 import profile_icon from "../assets/clone_assets/amishapfp.jpg";
-import logo from "../assets/clone_assets/Youtube_Logo.svg";
+import logo from "../assets/clone_assets/YouTube_Logo.svg";
 import logo2 from "../assets/clone_assets/Youtube_Dark_Logo.svg";
 
 const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
