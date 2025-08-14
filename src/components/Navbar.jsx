@@ -17,7 +17,6 @@ import logo2 from "../assets/clone_assets/Youtube_Dark_Logo.svg";
 const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isVoiceListening, setIsVoiceListening] = useState(false);
-  const [cameraStatus, setCameraStatus] = useState("");
   const [showCameraFeed, setShowCameraFeed] = useState(false);
   const videoRef = useRef(null);
   const currentStream = useRef(null);
@@ -37,7 +36,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
   const [showZoomedPfp, setShowZoomedPfp] = useState(false);
   const pfpZoomRef = useRef(null);
 
-
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
   const searchbarRef = useRef(null);
   const searchSuggestions = [
@@ -47,12 +45,11 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
     "ReactJS Project Ideas",
     "JavaScript ES6 features",
     "Prateek Kuhad Playlist",
-    "Web Developer Roadmap 2025"
+    "Web Developer Roadmap 2025",
   ];
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-
       if (
         notificationsRef.current &&
         !notificationsRef.current.contains(event.target)
@@ -75,13 +72,12 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showNotifications, showZoomedPfp]);
+  }, [showNotifications, showZoomedPfp, showSearchDropdown]);
 
-
+  // The useEffect hook for the camera is now simplified to only manage the stream
   useEffect(() => {
     if (showCameraFeed) {
       const startCamera = async () => {
-        setCameraStatus("Requesting camera access...");
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
           currentStream.current = stream;
@@ -89,24 +85,14 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
             videoRef.current.srcObject = stream;
             videoRef.current.play();
           }
-          setCameraStatus("Camera active!");
-          setTimeout(() => setCameraStatus(""), 3000);
         } catch (error) {
           console.error("Error accessing camera:", error);
-          if (error.name === "NotAllowedError") {
-            setCameraStatus("Camera access denied. Please allow in browser settings.");
-          } else if (error.name === "NotFoundError") {
-            setCameraStatus("No camera found.");
-          } else {
-            setCameraStatus("Failed to access camera.");
-          }
           setShowCameraFeed(false);
-          setTimeout(() => setCameraStatus(""), 5000);
         }
       };
+
       startCamera();
     }
-    
 
     return () => {
       if (currentStream.current) {
@@ -114,7 +100,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         currentStream.current = null;
       }
     };
-  }, [showCameraFeed]); 
+  }, [showCameraFeed]);
 
   const handleSearch = (queryToSearch = searchQuery) => {
     if (queryToSearch.trim()) {
@@ -124,12 +110,11 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
     }
   };
 
-
   const handleSuggestionClick = (suggestion) => {
     setSearchQuery(suggestion);
     handleSearch(suggestion);
   };
-  
+
   const handleVoiceSearch = () => {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -167,11 +152,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
   };
 
   const handleVideoCameraClick = () => {
-    setShowCameraFeed(!showCameraFeed);
-    if(showCameraFeed) {
-      setCameraStatus("Camera closed.");
-      setTimeout(() => setCameraStatus(""), 2000);
-    }
+    setShowCameraFeed((prev) => !prev);
   };
 
   const toggleNotifications = () => {
@@ -189,7 +170,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
   return (
     <nav
       className="flex items-center justify-between px-4 py-2 h-14 sm:h-16 w-full sticky top-0 shadow-sm
-                  bg-white text-gray-800 dark:bg-zinc-900 dark:text-white dark:shadow-lg dark:shadow-zinc-950/20 z-50 transition-colors duration-300"
+                   bg-white text-gray-800 dark:bg-zinc-900 dark:text-white dark:shadow-lg dark:shadow-zinc-950/20 z-50 transition-colors duration-300"
     >
       <div className="flex items-center space-x-4 min-w-[130px]">
         <Link to="/">
@@ -213,67 +194,61 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         </Link>
       </div>
 
-    <div className="flex-grow mx-4 max-w-[600px] hidden sm:flex items-center justify-center relative">
-  <div ref={searchbarRef} className="flex-grow max-w-[500px]">
-    <div className="flex w-full h-10 border border-gray-300 dark:border-zinc-700 rounded-full overflow-hidden">
-      <input
-        type="text"
-        placeholder="Search"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-        onFocus={() => setShowSearchDropdown(true)}
-        className="flex-grow px-4 text-sm focus:outline-none bg-white text-gray-800 dark:bg-zinc-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-      />
-      <button
-        onClick={() => handleSearch()}
-        className="bg-gray-100 dark:bg-zinc-700 px-4 flex items-center justify-center border-l border-gray-300 dark:border-zinc-700 hover:bg-gray-200 dark:hover:bg-zinc-600 transition-colors"
-      >
-        <MagnifyingGlassIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
-      </button>
-    </div>
-    {showSearchDropdown && (
-      <div className="absolute top-10 left-5 w-full max-w-[440px] mt-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-md shadow-lg z-10">
-        <ul>
-          {searchSuggestions
-            .filter((suggestion) =>
-              suggestion.toLowerCase().includes(searchQuery.toLowerCase())
-            )
-            .map((suggestion, index) => (
-              <li
-                key={index}
-                onClick={() => handleSuggestionClick(suggestion)}
-                className="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer"
-              >
-                <MagnifyingGlassIcon className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
-                <span className="text-sm text-gray-800 dark:text-gray-200">
-                  {suggestion}
-                </span>
-              </li>
-            ))}
-        </ul>
-      </div>
-    )}
-  </div>
+      <div className="flex-grow mx-4 max-w-[600px] hidden sm:flex items-center justify-center relative">
+        <div ref={searchbarRef} className="flex-grow max-w-[500px]">
+          <div className="flex w-full h-10 border border-gray-300 dark:border-zinc-700 rounded-full overflow-hidden">
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              onFocus={() => setShowSearchDropdown(true)}
+              className="flex-grow px-4 text-sm focus:outline-none bg-white text-gray-800 dark:bg-zinc-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
+            />
+            <button
+              onClick={() => handleSearch()}
+              className="bg-gray-100 dark:bg-zinc-700 px-4 flex items-center justify-center border-l border-gray-300 dark:border-zinc-700 hover:bg-gray-200 dark:hover:bg-zinc-600 transition-colors"
+            >
+              <MagnifyingGlassIcon className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+            </button>
+          </div>
+          {showSearchDropdown && (
+            <div className="absolute top-10 left-5 w-full max-w-[440px] mt-2 bg-white dark:bg-zinc-800 border border-gray-300 dark:border-zinc-700 rounded-md shadow-lg z-10">
+              <ul>
+                {searchSuggestions
+                  .filter((suggestion) =>
+                    suggestion.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .map((suggestion, index) => (
+                    <li
+                      key={index}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-zinc-700 cursor-pointer"
+                    >
+                      <MagnifyingGlassIcon className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
+                      <span className="text-sm text-gray-800 dark:text-gray-200">
+                        {suggestion}
+                      </span>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
+        </div>
 
-  
-  <button
-    onClick={handleVoiceSearch}
-    className={`ml-3 p-2 rounded-full cursor-pointer transition-colors duration-200
-                  ${
-                    isVoiceListening
-                      ? "bg-red-200 text-red-700 dark:bg-red-800 dark:text-red-200"
-                      : "bg-gray-100 text-gray-600 dark:bg-zinc-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-600"
-                  }`}
-  >
-    <MicrophoneIcon className="h-5 w-5" />
-  </button>
-  {cameraStatus && (
-    <div className="absolute top-full mt-2 p-2 bg-white dark:bg-zinc-700 text-black dark:text-white text-xs rounded shadow-md z-5 whitespace-nowrap">
-      {cameraStatus}
-    </div>
-  )}
-</div>
+        <button
+          onClick={handleVoiceSearch}
+          className={`ml-3 p-2 rounded-full cursor-pointer transition-colors duration-200
+                      ${
+                        isVoiceListening
+                          ? "bg-red-200 text-red-700 dark:bg-red-800 dark:text-red-200"
+                          : "bg-gray-100 text-gray-600 dark:bg-zinc-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-600"
+                      }`}
+        >
+          <MicrophoneIcon className="h-5 w-5" />
+        </button>
+      </div>
 
       <div className="flex items-center space-x-4 min-w-[130px] justify-end relative">
         <button
@@ -375,7 +350,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
             ></video>
             <button
               onClick={handleVideoCameraClick}
-              className="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-2 py-1.5 rounded-md  z-10"
+              className="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-2 py-1.5 rounded-md  z-10"
             >
               Close Camera
             </button>
