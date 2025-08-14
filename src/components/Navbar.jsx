@@ -37,6 +37,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
   const [showZoomedPfp, setShowZoomedPfp] = useState(false);
   const pfpZoomRef = useRef(null);
 
+
   useEffect(() => {
     const handleClickOutsideNotifications = (event) => {
       if (
@@ -46,7 +47,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         setShowNotifications(false);
       }
     };
-
     const handleClickOutsidePfpZoom = (event) => {
       if (pfpZoomRef.current && !pfpZoomRef.current.contains(event.target)) {
         setShowZoomedPfp(false);
@@ -69,10 +69,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
     }
 
     return () => {
-      if (currentStream.current) {
-        currentStream.current.getTracks().forEach((track) => track.stop());
-        currentStream.current = null;
-      }
       document.removeEventListener(
         "mousedown",
         handleClickOutsideNotifications
@@ -80,6 +76,62 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
       document.removeEventListener("mousedown", handleClickOutsidePfpZoom);
     };
   }, [showNotifications, showZoomedPfp]);
+
+  useEffect(() => {
+    const startCamera = async () => {
+      if (showCameraFeed) {
+        setCameraStatus("Requesting camera access...");
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          currentStream.current = stream;
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play();
+          }
+          setCameraStatus("Camera active!");
+         
+          setTimeout(() => setCameraStatus(""), 3000);
+        } catch (error) {
+          console.error("Error accessing camera:", error);
+          if (error.name === "NotAllowedError") {
+            setCameraStatus(
+              "Camera access denied. Please allow in browser settings."
+            );
+          } else if (error.name === "NotFoundError") {
+            setCameraStatus("No camera found.");
+          } else {
+            setCameraStatus("Failed to access camera.");
+          }
+          setShowCameraFeed(false);
+          setTimeout(() => setCameraStatus(""), 5000);
+        }
+      } else {
+       
+        if (currentStream.current) {
+          currentStream.current.getTracks().forEach((track) => track.stop());
+          currentStream.current = null;
+        }
+      }
+    };
+
+    startCamera();
+    
+    
+    return () => {
+      if (currentStream.current) {
+        currentStream.current.getTracks().forEach((track) => track.stop());
+        currentStream.current = null;
+      }
+    };
+  }, [showCameraFeed]); 
+  
+  const handleVideoCameraClick = () => {
+    setShowCameraFeed(!showCameraFeed);
+    if(showCameraFeed) {
+      setCameraStatus("Camera closed.");
+      setTimeout(() => setCameraStatus(""), 2000);
+    }
+  };
 
   const handleSearch = (queryToSearch = searchQuery) => {
     if (queryToSearch.trim()) {
@@ -124,45 +176,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
     recognition.start();
   };
 
-  const handleVideoCameraClick = async () => {
-    if (showCameraFeed) {
-      if (currentStream.current) {
-        currentStream.current.getTracks().forEach((track) => track.stop());
-        currentStream.current = null;
-      }
-      setShowCameraFeed(false);
-      setCameraStatus("Camera closed.");
-      setTimeout(() => setCameraStatus(""), 2000);
-      return;
-    }
-
-    setCameraStatus("Requesting camera access...");
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      currentStream.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        videoRef.current.play();
-      }
-      setCameraStatus("Camera active!");
-      setShowCameraFeed(true);
-      setTimeout(() => setCameraStatus(""), 3000);
-    } catch (error) {
-      console.error("Error accessing camera:", error);
-      if (error.name === "NotAllowedError") {
-        setCameraStatus(
-          "Camera access denied. Please allow in browser settings."
-        );
-      } else if (error.name === "NotFoundError") {
-        setCameraStatus("No camera found.");
-      } else {
-        setCameraStatus("Failed to access camera.");
-      }
-      setShowCameraFeed(false);
-      setTimeout(() => setCameraStatus(""), 5000);
-    }
-  };
-
   const toggleNotifications = () => {
     setShowNotifications((prev) => !prev);
   };
@@ -178,7 +191,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
   return (
     <nav
       className="flex items-center justify-between px-4 py-2 h-14 sm:h-16 w-full sticky top-0 shadow-sm
-                 bg-white text-gray-800 dark:bg-zinc-900 dark:text-white dark:shadow-lg dark:shadow-zinc-950/20 z-50 transition-colors duration-300"
+                  bg-white text-gray-800 dark:bg-zinc-900 dark:text-white dark:shadow-lg dark:shadow-zinc-950/20 z-50 transition-colors duration-300"
     >
       <div className="flex items-center space-x-4 min-w-[130px]">
         <Link to="/">
@@ -277,7 +290,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           <div
             ref={notificationsRef}
             className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-zinc-800 rounded-lg shadow-2xl/80 z-50
-                       border border-gray-300 dark:border-zinc-700 overflow-hidden"
+                        border border-gray-300 dark:border-zinc-700 overflow-hidden"
           >
             <div className="px-4 py-3 border-b border-gray-200 dark:border-zinc-700 flex justify-between items-center shadow-lg">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
@@ -304,7 +317,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         <button
           onClick={onThemeToggle}
           className="p-2 rounded-full cursor-pointer text-gray-700 dark:text-gray-300
-                     hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors duration-200"
+                      hover:bg-gray-100 dark:hover:bg-zinc-700 transition-colors duration-200"
           aria-label={
             currentTheme === "light"
               ? "Switch to Dark Mode"
@@ -326,27 +339,25 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         />
       </div>
 
-      {showCameraFeed && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50">
-          <div className="relative bg-white dark:bg-zinc-800 p-4 rounded-lg shadow-xl max-w-lg w-full">
-            <h2 className="text-lg font-bold mb-3 text-gray-900 dark:text-white">
-              Live Camera Feed
-            </h2>
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              className="w-full rounded-lg border border-gray-300 dark:border-zinc-700"
-            ></video>
-            <button
-              onClick={handleVideoCameraClick}
-              className="mt-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors"
-            >
-              Close Camera
-            </button>
-          </div>
-        </div>
-      )}
+     {showCameraFeed && (
+  <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+    <div className="relative w-full h-full ">
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted
+        className="w-full h-full object-cover"
+      ></video>
+      <button
+        onClick={handleVideoCameraClick}
+        className="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white px-2 py-1.5 rounded-md  z-10"
+      >
+        Close Camera
+      </button>
+    </div>
+  </div>
+)}
 
       {showZoomedPfp && (
         <div
@@ -356,8 +367,8 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
           <div
             ref={pfpZoomRef}
             className="relative w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] xl:w-[500px] xl:h-[500px]
-                       rounded-full overflow-hidden shadow-2xl border-2 border-white dark:border-gray-700
-                       transform scale-100 transition-transform duration-300 ease-out"
+                        rounded-full overflow-hidden shadow-2xl border-2 border-white dark:border-gray-700
+                        transform scale-100 transition-transform duration-300 ease-out"
             onClick={(e) => e.stopPropagation()}
           >
             <img
