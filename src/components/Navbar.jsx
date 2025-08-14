@@ -74,7 +74,6 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
     };
   }, [showNotifications, showZoomedPfp, showSearchDropdown]);
 
-  // The useEffect hook for the camera is now simplified to only manage the stream
   useEffect(() => {
     if (showCameraFeed) {
       const startCamera = async () => {
@@ -264,7 +263,7 @@ const Navbar = ({ setSidebar, currentTheme, onThemeToggle }) => {
         </button>
 
         <VideoCameraIcon
-          className={`h-6 w-6 cursor-pointer hidden sm:inline transition-colors duration-200
+          className={`h-6 w-6 cursor-pointer inline transition-colors duration-200
                       ${
                         showCameraFeed
                           ? "text-red-500"
